@@ -1,9 +1,20 @@
+import Navbar from './components/Navbar'
 import Inicio from './components/Inicio'
-
+import Rutinas from './components/Rutinas'
+import Ejercicios from './components/Ejercicios'
+import Calendario from './components/Calendario'
+import Progreso from './components/Progreso'
+import Footer from './components/Footer'
 function App() {
   return (
     <>
-      <Inicio mensaje="Organizá tus entrenamientos y llevá un seguimiento de tu progreso." />
+      <Navbar />
+      <Inicio />
+      <Rutinas />
+      <Ejercicios />
+      <Calendario />
+      <Progreso />
+      <Footer />
     </>
   )
 }
