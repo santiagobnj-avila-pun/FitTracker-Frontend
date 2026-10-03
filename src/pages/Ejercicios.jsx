@@ -1,108 +1,36 @@
 import { useState } from 'react'
+import { Button, Col, Form, Row } from 'react-bootstrap'
+import PageLayout from '../components/PageLayout'
+import EjercicioCard from '../components/EjercicioCard'
 
-function EjercicioCard({ imagen, nombre, musculo, equipo, descripcion }) {
-  const [seleccionado, setSeleccionado] = useState(false)
-
-  function manejarSeleccion() {
-    setSeleccionado(!seleccionado)
-  }
-
-  return (
-    <div className="col-12 col-md-6 col-lg-3">
-      <div className="card h-100">
-
-        <img
-          src={imagen}
-          className="card-img-top"
-          alt={nombre}
-        />
-
-        <div className="card-body">
-          <h3 className="h5">{nombre}</h3>
-
-          <p className="mb-1">
-            <strong>Músculo:</strong> {musculo}
-          </p>
-
-          <p className="mb-2">
-            <strong>Equipo:</strong> {equipo}
-          </p>
-
-          <p className="text-body-secondary">
-            {descripcion}
-          </p>
-
-          <button
-            className={`btn ${seleccionado ? 'btn-success' : 'btn-primary'}`}
-            onClick={manejarSeleccion}
-          >
-            {seleccionado ? 'Seleccionado' : 'Seleccionar'}
-          </button>
-
-        </div>
-      </div>
-    </div>
+function Ejercicios({ ejercicios, seleccionados, onSeleccionar }) {
+  const [busqueda, setBusqueda] = useState('')
+  const [mostrarTodos, setMostrarTodos] = useState(false)
+  const visibles = ejercicios.filter((ejercicio) =>
+    `${ejercicio.nombre} ${ejercicio.musculo} ${ejercicio.equipo}`.toLocaleLowerCase('es').includes(busqueda.trim().toLocaleLowerCase('es')),
   )
-}
-
-function Ejercicios() {
-  const ejercicios = [
-    {
-      imagen: "/img/ejercicio-sentadilla-v2.png",
-      nombre: "Sentadilla",
-      musculo: "Piernas",
-      equipo: "Barra",
-      descripcion: "Ejercicio para trabajar principalmente las piernas."
-    },
-    {
-      imagen: "/img/ejercicio-press-banca-v2.png",
-      nombre: "Press de banca",
-      musculo: "Pecho",
-      equipo: "Barra",
-      descripcion: "Ejercicio para trabajar principalmente el pecho."
-    },
-    {
-      imagen: "/img/ejercicio-remo-v2.png",
-      nombre: "Remo con mancuerna",
-      musculo: "Espalda",
-      equipo: "Mancuerna",
-      descripcion: "Ejercicio para trabajar principalmente la espalda."
-    },
-    {
-      imagen: "/img/ejercicio-peso-muerto-v2.png",
-      nombre: "Peso muerto",
-      musculo: "Espalda",
-      equipo: "Barra",
-      descripcion: "Ejercicio que trabaja diferentes grupos musculares."
-    }
-  ]
 
   return (
-    <section id="ejercicios" className="py-5">
-      <div className="container">
-
-        <div className="text-center mb-4">
-          <h2>Ejercicios</h2>
-          <p className="text-body-secondary">
-            Consultá los ejercicios disponibles.
-          </p>
+    <PageLayout titulo="Ejercicios" descripcion="Explorá ejercicios por nombre, grupo muscular o equipamiento y seleccioná tus preferidos.">
+      <Form.Group className="mb-4" controlId="buscar-ejercicio">
+        <Form.Label>Buscar un ejercicio</Form.Label>
+        <Form.Control type="search" value={busqueda} onChange={(evento) => { setBusqueda(evento.target.value); setMostrarTodos(false) }} placeholder="Por ejemplo: pecho, barra o sentadilla" />
+      </Form.Group>
+      <p role="status" className="text-body-secondary">{visibles.length} ejercicios disponibles</p>
+      <Row id="catalogo-ejercicios" xs={1} md={2} xl={4} className="g-4">
+        {(mostrarTodos ? visibles : visibles.slice(0, 8)).map((ejercicio) => (
+          <Col key={ejercicio.id}><EjercicioCard ejercicio={ejercicio} seleccionado={seleccionados.includes(ejercicio.id)} onSeleccionar={onSeleccionar} /></Col>
+        ))}
+      </Row>
+      {visibles.length > 8 && (
+        <div className="text-center mt-4">
+          <Button variant="outline-primary" className="rounded-pill" aria-expanded={mostrarTodos} aria-controls="catalogo-ejercicios" onClick={() => setMostrarTodos((actual) => !actual)}>
+            {mostrarTodos ? 'Ver menos ejercicios' : `Ver todos los ejercicios (${visibles.length})`}
+          </Button>
         </div>
-
-        <div className="row g-4">
-          {ejercicios.map((ejercicio) => (
-            <EjercicioCard
-              key={ejercicio.nombre}
-              imagen={ejercicio.imagen}
-              nombre={ejercicio.nombre}
-              musculo={ejercicio.musculo}
-              equipo={ejercicio.equipo}
-              descripcion={ejercicio.descripcion}
-            />
-          ))}
-        </div>
-
-      </div>
-    </section>
+      )}
+      {visibles.length === 0 && <p className="text-center py-4">No encontramos ejercicios con esa búsqueda.</p>}
+    </PageLayout>
   )
 }
 
