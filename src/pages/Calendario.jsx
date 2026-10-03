@@ -1,130 +1,54 @@
 import { useState } from 'react'
+import { Button, Card, Table } from 'react-bootstrap'
+import PageLayout from '../components/PageLayout'
+
+const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
 function Calendario() {
-  const [mes, setMes] = useState(7)
-  const [anio, setAnio] = useState(2026)
+  const [fecha, setFecha] = useState(() => new Date())
+  const mes = fecha.getMonth()
+  const anio = fecha.getFullYear()
+  const hoy = new Date()
+  const nombreMes = fecha.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })
+  const inicio = (new Date(anio, mes, 1).getDay() + 6) % 7
+  const cantidad = new Date(anio, mes + 1, 0).getDate()
+  const celdas = Array.from({ length: Math.ceil((inicio + cantidad) / 7) * 7 }, (_, indice) => {
+    const dia = indice - inicio + 1
+    return dia > 0 && dia <= cantidad ? dia : null
+  })
+  const semanas = Array.from({ length: celdas.length / 7 }, (_, indice) => celdas.slice(indice * 7, indice * 7 + 7))
 
-  const meses = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ]
-
-  function mesAnterior() {
-    if (mes === 0) {
-      setMes(11)
-      setAnio(anio - 1)
-    } else {
-      setMes(mes - 1)
-    }
+  function cambiarMes(cambio) {
+    setFecha((actual) => new Date(actual.getFullYear(), actual.getMonth() + cambio, 1))
   }
-
-  function mesSiguiente() {
-    if (mes === 11) {
-      setMes(0)
-      setAnio(anio + 1)
-    } else {
-      setMes(mes + 1)
-    }
-  }
-
-  const diasDelMes = new Date(anio, mes + 1, 0).getDate()
 
   return (
-    <section id="calendario" className="py-5">
-      <div className="container">
-
-        <div className="text-center mb-4">
-          <h2>Calendario</h2>
-
-          <p className="text-body-secondary">
-            Organizá tus entrenamientos.
-          </p>
-        </div>
-
-        <div className="card">
-          <div className="card-body">
-
-            <div className="d-flex justify-content-between align-items-center mb-4">
-
-              <button
-                className="btn btn-outline-primary"
-                onClick={mesAnterior}
-              >
-                ←
-              </button>
-
-              <h3 className="h4 mb-0">
-                {meses[mes]} {anio}
-              </h3>
-
-              <button
-                className="btn btn-outline-primary"
-                onClick={mesSiguiente}
-              >
-                →
-              </button>
-
-            </div>
-
-            <div className="row row-cols-7 text-center g-2">
-
-              <div className="col">
-                <strong>Lun</strong>
-              </div>
-
-              <div className="col">
-                <strong>Mar</strong>
-              </div>
-
-              <div className="col">
-                <strong>Mié</strong>
-              </div>
-
-              <div className="col">
-                <strong>Jue</strong>
-              </div>
-
-              <div className="col">
-                <strong>Vie</strong>
-              </div>
-
-              <div className="col">
-                <strong>Sáb</strong>
-              </div>
-
-              <div className="col">
-                <strong>Dom</strong>
-              </div>
-
-            </div>
-
-            <div className="row row-cols-7 text-center g-2 mt-2">
-
-              {Array.from({ length: diasDelMes }, (_, i) => (
-                <div className="col" key={i}>
-                  <div className="border rounded p-3">
-                    {i + 1}
-                  </div>
-                </div>
-              ))}
-
-            </div>
-
+    <PageLayout titulo="Calendario" descripcion="Tus entrenamientos, día por día." className="bg-body-tertiary">
+      <Card className="calendario-app mx-auto border-0 bg-transparent">
+        <Card.Body>
+          <div className="d-flex justify-content-center align-items-center gap-3 mb-4">
+            <Button size="sm" className="rounded-pill" variant="outline-primary" aria-label="Mes anterior" onClick={() => cambiarMes(-1)}>‹</Button>
+            <h2 className="h4 text-capitalize text-center mb-0" aria-live="polite">{nombreMes}</h2>
+            <Button size="sm" className="rounded-pill" variant="outline-primary" aria-label="Mes siguiente" onClick={() => cambiarMes(1)}>›</Button>
           </div>
-        </div>
-
-      </div>
-    </section>
+          <Table responsive borderless className="text-center align-middle mb-3 calendario">
+            <caption className="visually-hidden">Calendario de {nombreMes}; semanas de lunes a domingo</caption>
+            <thead><tr>{diasSemana.map((dia) => <th key={dia} scope="col">{dia}</th>)}</tr></thead>
+            <tbody>
+              {semanas.map((semana, indice) => (
+                <tr key={indice}>
+                  {semana.map((dia, columna) => {
+                    const esHoy = dia === hoy.getDate() && mes === hoy.getMonth() && anio === hoy.getFullYear()
+                    return <td key={columna} className={esHoy ? 'dia-actual' : ''} aria-current={esHoy ? 'date' : undefined}>{dia}</td>
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Button variant="outline-primary" className="rounded-pill" onClick={() => setFecha(new Date())}>Volver al mes actual</Button>
+        </Card.Body>
+      </Card>
+    </PageLayout>
   )
 }
 

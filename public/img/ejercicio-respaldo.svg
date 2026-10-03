@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320" role="img" aria-label="Mancuerna ilustrativa">
+  <rect width="480" height="320" fill="#f3f3f3"/>
+  <g transform="translate(240 160) rotate(-25)">
+    <rect x="-120" y="-12" width="240" height="24" rx="10" fill="#777"/>
+    <rect x="-120" y="-65" width="35" height="130" rx="12" fill="#292929"/>
+    <rect x="-85" y="-48" width="20" height="96" rx="8" fill="#ff7b13"/>
+    <rect x="85" y="-65" width="35" height="130" rx="12" fill="#292929"/>
+    <rect x="65" y="-48" width="20" height="96" rx="8" fill="#ff7b13"/>
+  </g>
+</svg>
