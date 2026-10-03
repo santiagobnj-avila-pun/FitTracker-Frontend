@@ -1,59 +1,60 @@
+import { useState } from 'react'
+import { Container, Nav, Navbar as BootstrapNavbar } from 'react-bootstrap'
+import { Link, NavLink } from 'react-router-dom'
+import { navegacion } from '../data/contenido'
+import ImagenIlustrativa from './ImagenIlustrativa'
+
 function Navbar() {
-    return (
-        <header className="sticky-top">
-            <nav className="navbar navbar-expand-lg py-2">
-                <div className="container">
+  const [expandida, setExpandida] = useState(false)
 
-                    <a className="navbar-brand d-flex align-items-center gap-2 mb-0" href="#inicio">
-                        <span>FIT TRACKER</span>
-                        <img
-                            src="/img/mascota-navbar-reclinada.png"
-                            className="navbar-mascota object-fit-contain"
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </a>
+  return (
+    <BootstrapNavbar
+      expanded={expandida}
+      onToggle={setExpandida}
+      expand="lg"
+      sticky="top"
+      className="navbar-fit py-2"
+      aria-label="Navegación principal"
+    >
+      <Container>
+        <BootstrapNavbar.Brand
+          as={Link}
+          to="/"
+          onClick={() => setExpandida(false)}
+          className="text-uppercase d-flex align-items-center gap-2 mb-0"
+        >
+          Fit Tracker
+          <ImagenIlustrativa
+            src="/img/mascota-navbar-reclinada.png"
+            alt=""
+            className="navbar-mascota object-fit-contain"
+            loading="eager"
+          />
+        </BootstrapNavbar.Brand>
 
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navPrincipal"
-                        aria-controls="navPrincipal"
-                        aria-expanded="false"
-                        aria-label="Abrir menú"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
+        <BootstrapNavbar.Toggle
+          aria-controls="menu-principal"
+          aria-label="Abrir o cerrar navegación"
+        />
 
-                    <div className="collapse navbar-collapse" id="navPrincipal">
-                        <ul className="navbar-nav ms-auto text-center gap-lg-3">
-                            <li className="nav-item">
-                                <a className="nav-link py-2" href="#inicio">Inicio</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link py-2" href="#rutinas">Rutinas</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link py-2" href="#ejercicios">Ejercicios</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link py-2" href="#calendario">Calendario</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link py-2" href="#progreso">Progreso</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </nav>
-        </header>
-    )
+        <BootstrapNavbar.Collapse id="menu-principal">
+          <Nav className="ms-auto text-center gap-lg-3">
+            {navegacion.map(({ ruta, nombre }) => (
+              <Nav.Link
+                key={ruta}
+                as={NavLink}
+                to={ruta}
+                end={ruta === '/'}
+                onClick={() => setExpandida(false)}
+              >
+                {nombre}
+              </Nav.Link>
+            ))}
+          </Nav>
+        </BootstrapNavbar.Collapse>
+      </Container>
+    </BootstrapNavbar>
+  )
 }
 
 export default Navbar
