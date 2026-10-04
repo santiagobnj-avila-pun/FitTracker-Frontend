@@ -1,118 +1,88 @@
-import { useState } from 'react'
 
-function RutinaItem({ nombre, descripcion }) {
-  const [seleccionada, setSeleccionada] = useState(false)
+import { Card, Col, Row } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import PageLayout from '../components/PageLayout'
+import RutinaItem from '../components/RutinaItem'
 
-  function manejarSeleccion() {
-    setSeleccionada(!seleccionada)
-  }
-
-  return (
-    <div className="d-flex justify-content-between align-items-center border-bottom py-3">
-      <div>
-        <h4 className="h6 mb-1">{nombre}</h4>
-
-        <p className="text-body-secondary mb-0">
-          {descripcion}
-        </p>
-      </div>
-
-      <button
-        className={`btn ${seleccionada ? 'btn-success' : 'btn-primary'}`}
-        onClick={manejarSeleccion}
-      >
-        {seleccionada ? 'Seleccionada' : 'Usar rutina'}
-      </button>
-    </div>
-  )
-}
-
-function Rutinas() {
-  const rutinas = [
-    {
-      nombre: 'Rutina de fuerza',
-      descripcion: 'Entrenamiento completo de fuerza.'
-    },
-    {
-      nombre: 'Rutina de hipertrofia',
-      descripcion: 'Rutina enfocada en el desarrollo muscular.'
-    },
-    {
-      nombre: 'Rutina de cuerpo completo',
-      descripcion: 'Entrenamiento para todo el cuerpo.'
-    }
-  ]
+function Rutinas({ rutinas, seleccionada, onSeleccionar }) {
+  const rutinaActual = rutinas.find((rutina) => rutina.id === seleccionada)
 
   return (
-    <section id="rutinas" className="py-5">
-      <div className="container">
+    <PageLayout
+      titulo="Rutinas"
+      descripcion="Elegí una rutina para organizar tu entrenamiento."
+      className="bg-body-tertiary"
+    >
+      <Row className="g-4">
+        <Col xs={12} lg={6}>
+          <Card className="h-100 border-0 shadow-sm">
+            <Card.Header className="bg-transparent border-0 pt-4 px-4">
+              <h2 className="h5 mb-0">
+                <i
+                  className="bi bi-collection text-primary me-2"
+                  aria-hidden="true"
+                />
+                Biblioteca de rutinas
+              </h2>
+            </Card.Header>
 
-        <div className="text-center mb-4">
-          <h2>Rutinas</h2>
+            <Card.Body className="pt-2">
+              <ul className="list-group list-group-flush">
+                {rutinas.map((rutina) => (
+                  <RutinaItem
+                    key={rutina.id}
+                    rutina={rutina}
+                    seleccionada={seleccionada === rutina.id}
+                    onSeleccionar={onSeleccionar}
+                  />
+                ))}
+              </ul>
+            </Card.Body>
+          </Card>
+        </Col>
 
-          <p className="text-body-secondary">
-            Organizá y gestioná tus rutinas de entrenamiento.
-          </p>
-        </div>
+        <Col xs={12} lg={6}>
+          <Card className="h-100 border-0 shadow-sm">
+            <Card.Header className="bg-transparent border-0 pt-4 px-4">
+              <h2 className="h5 mb-0">
+                <i
+                  className="bi bi-clipboard-check text-primary me-2"
+                  aria-hidden="true"
+                />
+                Mi rutina
+              </h2>
+            </Card.Header>
 
-        <div className="row g-4">
+            <Card.Body className="p-4 pt-3 d-flex flex-column align-items-start">
+              {rutinaActual ? (
+                <>
+                  <h3 className="h4">{rutinaActual.nombre}</h3>
+                  <p className="text-body-secondary">
+                    {rutinaActual.descripcion}
+                  </p>
+                </>
+              ) : (
+                <p className="text-body-secondary">
+                  Elegí una rutina de la biblioteca para verla en tu resumen.
+                </p>
+              )}
 
-          <div className="col-12 col-lg-6">
-            <div className="card h-100">
-              <div className="card-body">
+              <Link
+                to="/progreso"
+                className="btn btn-outline-primary btn-sm rounded-pill mt-auto"
+              >
+                Consultar mi resumen
+              </Link>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
 
-                <h3 className="h4">
-                  Biblioteca de rutinas
-                </h3>
-
-                <div className="lista-rutinas">
-                  {rutinas.map((rutina) => (
-                    <RutinaItem
-                      key={rutina.nombre}
-                      nombre={rutina.nombre}
-                      descripcion={rutina.descripcion}
-                    />
-                  ))}
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-lg-6">
-            <div className="card h-100">
-              <div className="card-body">
-
-                <h3 className="h4">
-                  Gestor de rutinas
-                </h3>
-
-                <div className="d-flex justify-content-between align-items-center py-3">
-
-                  <div>
-                    <h4 className="h6 mb-1">
-                      Mi rutina de fuerza
-                    </h4>
-
-                    <p className="text-body-secondary mb-0">
-                      Tu rutina personalizada.
-                    </p>
-                  </div>
-
-                  <button className="btn btn-outline-primary">
-                    Editar
-                  </button>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
+      <p className="small text-body-secondary mt-4 mb-0">
+        Estas plantillas son ejemplos generales y no sustituyen una
+        planificación profesional.
+      </p>
+    </PageLayout>
   )
 }
 
