@@ -1,16 +1,15 @@
 import { Link } from 'react-router-dom'
+import PageLayout from '../components/PageLayout'
 
 function NoEncontrada() {
   return (
-    <div className="container py-5 text-center">
-      <h1>Página no encontrada</h1>
-      <p>La página que buscás no existe.</p>
-      <Link to="/" className="btn btn-primary">
-        Volver al inicio
-      </Link>
-    </div>
+    <PageLayout titulo="Página no encontrada" descripcion="La dirección que buscás no corresponde a una página de Fit Tracker." noIndex>
+      <div className="text-center">
+        <p className="display-1 text-primary fw-bold">404</p>
+        <Link to="/" className="btn btn-primary rounded-pill">Volver al inicio</Link>
+      </div>
+    </PageLayout>
   )
 }
 
 export default NoEncontrada
-
