@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
@@ -9,11 +8,31 @@ import Ejercicios from './pages/Ejercicios'
 import Calendario from './pages/Calendario'
 import Progreso from './pages/Progreso'
 import NoEncontrada from './pages/NoEncontrada'
-import { ejercicios, rutinas } from './data/contenido'
+import { ejercicios } from './data/contenido'
+import useAgenda from './hooks/useAgenda'
+import useRutinas from './hooks/useRutinas'
 
 function App() {
+  const { agenda, agendar, quitar, reiniciar, habilitado, error } = useAgenda()
+  const biblioteca = useRutinas()
+  const { rutinas } = biblioteca
   const [seleccionados, setSeleccionados] = useState([])
   const [rutinaId, setRutinaId] = useState(null)
+
+  function guardarRutina(datos) {
+    const resultado = biblioteca.guardar(datos)
+    if (!resultado.error) setRutinaId(resultado.id)
+    return resultado
+  }
+
+  function eliminarRutina(id) {
+    if (!habilitado) return 'No se puede verificar la agenda local. Recuperá sus datos antes de eliminar rutinas.'
+    if (agenda.some((item) => item.rutinaId === id)) return 'Esta rutina está en el calendario. Quitá primero sus asignaciones futuras. Si tiene fechas pasadas, se conserva para mantener el historial.'
+    if (!biblioteca.habilitado) return biblioteca.error
+    biblioteca.eliminar(id)
+    if (rutinaId === id) setRutinaId(null)
+    return null
+  }
 
   function alternarEjercicio(id) {
     setSeleccionados((actuales) =>
@@ -45,6 +64,12 @@ function App() {
                 rutinas={rutinas}
                 seleccionada={rutinaId}
                 onSeleccionar={setRutinaId}
+                ejercicios={ejercicios}
+                seleccionados={seleccionados}
+                onGuardar={guardarRutina}
+                onEliminar={eliminarRutina}
+                errorRutinas={biblioteca.error}
+                habilitado={biblioteca.habilitado}
               />
             }
           />
@@ -58,7 +83,10 @@ function App() {
               />
             }
           />
-          <Route path="/calendario" element={<Calendario />} />
+          <Route
+            path="/calendario"
+            element={<Calendario rutinas={rutinas} rutinaPreferida={rutinaId} agenda={agenda} onAgendar={agendar} onQuitar={quitar} errorAgenda={error} habilitado={habilitado} onReiniciar={reiniciar} />}
+          />
           <Route
             path="/progreso"
             element={
