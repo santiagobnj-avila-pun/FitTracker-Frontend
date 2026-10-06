@@ -12,7 +12,7 @@ function EjercicioCard({ ejercicio, seleccionado, onSeleccionar }) {
           <Badge bg="secondary">{ejercicio.equipo}</Badge>
         </div>
         <Card.Text className="small text-body-secondary">{ejercicio.descripcion}</Card.Text>
-        <Button size="sm" className="mt-auto rounded-pill align-self-start" variant={seleccionado ? 'primary' : 'outline-primary'} aria-pressed={seleccionado} onClick={() => onSeleccionar(ejercicio.id)}>{seleccionado ? '✓ Seleccionado' : '+ Seleccionar'}</Button>
+        <Button size="sm" className="mt-auto rounded-pill align-self-start" variant={seleccionado ? 'primary' : 'outline-primary'} aria-pressed={seleccionado} onClick={() => onSeleccionar(ejercicio.id)}>{seleccionado ? '✓ Elegido · Quitar de mi selección' : '+ Elegir para mi rutina'}</Button>
       </Card.Body>
     </Card>
   )
