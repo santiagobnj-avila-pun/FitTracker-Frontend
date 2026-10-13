@@ -39,13 +39,13 @@ Desde la carpeta del proyecto:
 
 npm install
 
-Crear `.env` en la raíz del proyecto copiando el contenido de `.env.example`:
+Crear un archivo `.env` en la raíz del proyecto, junto a `package.json`, con este contenido:
 
 ```env
 VITE_API_URL=https://oss.exercisedb.dev/api/v1/exercises
 ```
 
-`.env` está ignorado por Git y no se sube al repositorio; `.env.example` sí se comparte como plantilla sin secretos. La URL no está escrita dentro de los componentes: se lee en el servicio mediante `import.meta.env.VITE_API_URL`. Las variables `VITE_` son públicas en el frontend, por lo que no deben contener contraseñas ni claves privadas. Reiniciar Vite después de modificar `.env`. En Vercel configurar `VITE_API_URL` con el mismo valor para el entorno del deploy y volver a desplegar.
+`.env` está ignorado por Git y no se sube al repositorio. Cada integrante debe crearlo localmente siguiendo las instrucciones anteriores. La URL no está escrita dentro de los componentes: se lee en el servicio mediante `import.meta.env.VITE_API_URL`. Las variables `VITE_` son públicas en el frontend, por lo que no deben contener contraseñas ni claves privadas. Reiniciar Vite después de modificar `.env`. En Vercel configurar `VITE_API_URL` con el mismo valor para el entorno del deploy y volver a desplegar.
 
 npm run dev
 
@@ -80,4 +80,18 @@ src/
 
 Las páginas representan las vistas completas. Los componentes reciben datos y acciones mediante props. La navegación, las tarjetas, las rutinas, las semanas del calendario y el resumen usan `map()` con claves estables.
 
-La justificación de los hooks del calendario y sus dependencias está en `docs/TP7-Hooks.md`, y la de rutinas en `docs/TP7-Rutinas.md`. El TP8 se explica en `docs/TP8-API.md`. Las pruebas se ejecutan con `node --test tests/agenda.test.mjs tests/rutinas.test.mjs tests/ejerciciosApi.test.mjs`, además de la revisión con lint y build.
+
+## Estrategias SEO aplicadas
+
+- **Idioma y adaptación móvil:** `index.html` declara `lang="es"` y la etiqueta `viewport` para adaptar la página al dispositivo.
+- **Títulos y descripciones:** cada página recibe un título y una descripción propios mediante `PageLayout`. Su `useEffect` actualiza `document.title` y la etiqueta `meta description` al navegar.
+- **HTML semántico:** se utilizan `header`, `nav`, `main`, `section`, `article` y `footer` para identificar las partes del contenido. Las páginas tienen un encabezado principal `h1` y sus secciones utilizan `h2` y `h3`.
+- **Imágenes:** las ilustraciones informativas tienen textos alternativos (`alt`) descriptivos. Las imágenes decorativas utilizan `alt=""`. La carga diferida (`loading="lazy"`) se aplica a las tarjetas, no a la imagen principal del inicio.
+- **Direcciones descriptivas:** las rutas `/rutinas`, `/ejercicios`, `/calendario` y `/progreso` identifican cada sección. Los enlaces internos permiten recorrerlas.
+- **Metadatos para compartir:** las etiquetas Open Graph definen el nombre del sitio, el título y la descripción; `PageLayout` actualiza estos dos últimos por página.
+- **Página no encontrada:** la vista de una ruta desconocida utiliza `noindex, follow` para indicar que no debe indexarse como contenido normal.
+
+
+## Iconos
+
+Bootstrap Icons se instala como dependencia y se importa desde `src/main.jsx`. Vite publica sus estilos y fuentes con los archivos del proyecto, sin solicitar los iconos al CDN de jsDelivr. Así se evita esa dependencia externa que provocaba advertencias de prevención de seguimiento en el navegador.
