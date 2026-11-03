@@ -8,6 +8,9 @@ import Ejercicios from './pages/Ejercicios'
 import Calendario from './pages/Calendario'
 import Progreso from './pages/Progreso'
 import NoEncontrada from './pages/NoEncontrada'
+import Login from './pages/Login'
+import Registro from './pages/Registro'
+import RutaProtegida from './components/RutaProtegida'
 import { ejercicios } from './data/contenido'
 import useAgenda from './hooks/useAgenda'
 import useRutinas from './hooks/useRutinas'
@@ -60,17 +63,19 @@ function App() {
           <Route
             path="/rutinas"
             element={
-              <Rutinas
-                rutinas={rutinas}
-                seleccionada={rutinaId}
-                onSeleccionar={setRutinaId}
-                ejercicios={ejercicios}
-                seleccionados={seleccionados}
-                onGuardar={guardarRutina}
-                onEliminar={eliminarRutina}
-                errorRutinas={biblioteca.error}
-                habilitado={biblioteca.habilitado}
-              />
+              <RutaProtegida>
+                <Rutinas
+                  rutinas={rutinas}
+                  seleccionada={rutinaId}
+                  onSeleccionar={setRutinaId}
+                  ejercicios={ejercicios}
+                  seleccionados={seleccionados}
+                  onGuardar={guardarRutina}
+                  onEliminar={eliminarRutina}
+                  errorRutinas={biblioteca.error}
+                  habilitado={biblioteca.habilitado}
+                />
+              </RutaProtegida>
             }
           />
           <Route
@@ -85,19 +90,23 @@ function App() {
           />
           <Route
             path="/calendario"
-            element={<Calendario rutinas={rutinas} rutinaPreferida={rutinaId} agenda={agenda} onAgendar={agendar} onQuitar={quitar} errorAgenda={error} habilitado={habilitado} onReiniciar={reiniciar} />}
+            element={<RutaProtegida><Calendario rutinas={rutinas} rutinaPreferida={rutinaId} agenda={agenda} onAgendar={agendar} onQuitar={quitar} errorAgenda={error} habilitado={habilitado} onReiniciar={reiniciar} /></RutaProtegida>}
           />
           <Route
             path="/progreso"
             element={
-              <Progreso
-                ejercicios={ejercicios.filter((ejercicio) =>
-                  seleccionados.includes(ejercicio.id),
-                )}
-                rutina={rutinas.find((rutina) => rutina.id === rutinaId)}
-              />
+              <RutaProtegida>
+                <Progreso
+                  ejercicios={ejercicios.filter((ejercicio) =>
+                    seleccionados.includes(ejercicio.id),
+                  )}
+                  rutina={rutinas.find((rutina) => rutina.id === rutinaId)}
+                />
+              </RutaProtegida>
             }
           />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
           <Route path="*" element={<NoEncontrada />} />
         </Routes>
       </main>
