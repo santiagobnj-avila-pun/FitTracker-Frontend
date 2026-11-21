@@ -48,7 +48,7 @@ function Rutinas({ rutinas, seleccionada, onSeleccionar, ejercicios, seleccionad
             </Card.Header>
             <Card.Body className="pt-2">
               <ul className="list-group list-group-flush">
-                {plantillas.map((rutina) => <RutinaItem key={rutina.id} rutina={rutina} seleccionada={seleccionada === rutina.id} onSeleccionar={onSeleccionar} />)}
+                {plantillas.map((rutina) => <RutinaItem key={rutina.id} rutina={rutina} ejercicios={ejercicios} seleccionada={seleccionada === rutina.id} onSeleccionar={onSeleccionar} />)}
               </ul>
             </Card.Body>
           </Card>
