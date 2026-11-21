@@ -394,7 +394,42 @@ export const ejercicios = [
 ]
 
 export const rutinas = [
-  { id: 'fuerza', nombre: 'Rutina de fuerza', descripcion: 'Ejemplo de entrenamiento orientado a trabajar la fuerza.' },
-  { id: 'hipertrofia', nombre: 'Rutina de hipertrofia', descripcion: 'Ejemplo de rutina enfocada en el desarrollo muscular.' },
-  { id: 'cuerpo-completo', nombre: 'Rutina de cuerpo completo', descripcion: 'Ejemplo de entrenamiento para distintos grupos musculares.' },
+  {
+    id: 'fuerza',
+    nombre: 'Rutina de fuerza',
+    descripcion: 'Ejemplo de entrenamiento orientado a trabajar la fuerza.',
+    ejercicios: [
+      { ejercicioId: 'sentadilla', series: 5, cantidad: 5, unidad: 'repeticiones' },
+      { ejercicioId: 'press-banca', series: 5, cantidad: 5, unidad: 'repeticiones' },
+      { ejercicioId: 'peso-muerto', series: 5, cantidad: 5, unidad: 'repeticiones' },
+      { ejercicioId: 'press-militar', series: 4, cantidad: 6, unidad: 'repeticiones' },
+      { ejercicioId: 'dominadas', series: 4, cantidad: 6, unidad: 'repeticiones' },
+    ],
+  },
+  {
+    id: 'hipertrofia',
+    nombre: 'Rutina de hipertrofia',
+    descripcion: 'Ejemplo de rutina enfocada en el desarrollo muscular.',
+    ejercicios: [
+      { ejercicioId: 'press-inclinado', series: 4, cantidad: 10, unidad: 'repeticiones' },
+      { ejercicioId: 'jalon', series: 4, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'prensa', series: 4, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'laterales', series: 3, cantidad: 15, unidad: 'repeticiones' },
+      { ejercicioId: 'curl-mancuerna', series: 3, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'triceps-cuerda', series: 3, cantidad: 12, unidad: 'repeticiones' },
+    ],
+  },
+  {
+    id: 'cuerpo-completo',
+    nombre: 'Rutina de cuerpo completo',
+    descripcion: 'Ejemplo de entrenamiento para distintos grupos musculares.',
+    ejercicios: [
+      { ejercicioId: 'zancadas', series: 3, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'flexiones', series: 3, cantidad: 15, unidad: 'repeticiones' },
+      { ejercicioId: 'remo-mancuerna', series: 3, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'hip-thrust', series: 3, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'press-hombros', series: 3, cantidad: 12, unidad: 'repeticiones' },
+      { ejercicioId: 'plancha', series: 3, cantidad: 45, unidad: 'segundos' },
+    ],
+  },
 ]
